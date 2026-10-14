@@ -9,12 +9,12 @@ Do this before touching any API code, since the endpoints depend on these fields
 - [x] Decide if `status` stays just `pending`/`completed`, or expands (e.g. adds `in_progress`) — affects the UI toggle later
 
 ## Phase 1 — Task API
-- [ ] `GET /api/tasks` — list, with optional query params: `?status=`, `?priority=`, `?search=`
-- [ ] `POST /api/tasks` — create (title, priority, scheduled_start/end optional)
-- [ ] `PATCH /api/tasks/:id` — update (title, status, priority, schedule — one endpoint handles all edits)
-- [ ] `DELETE /api/tasks/:id`
-- [ ] `GET /api/tasks/stats` — counts for the dashboard/stat cards
-- [ ] All routes behind `requireAuth`, scoped to `req.userId`
+- [x] `GET /api/tasks` — list, with optional query params: `?status=`, `?priority=`, `?search=`
+- [x] `POST /api/tasks` — create (title, priority, scheduled_start/end optional)
+- [x] `PATCH /api/tasks/:id` — update (title, status, priority, schedule — one endpoint handles all edits)
+- [x] `DELETE /api/tasks/:id`
+- [x] `GET /api/tasks/stats` — counts for the dashboard/stat cards
+- [x] All routes behind `requireAuth`, scoped to `req.userId`
 
 ## Phase 2 — Shared frontend pieces
 - [ ] `TaskItem` — checkbox to toggle complete, title, priority badge, edit + delete actions
