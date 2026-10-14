@@ -1,19 +1,19 @@
-import {Link, Links} from 'react-router-dom'
-import Button from "./Button"
+import { Link, NavLink } from 'react-router-dom'
+import Button from './Button'
 
-export default function Navbar(){
-    return (
-        <nav className="flex items-center px-8 py-5">
-            <Link to="/" className="flex ml-25  w-full items-center gp-2">
-                <div className='w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500  flex items-center justify-center font-bold'>T</div>
-                <span className='font-bold text-lg bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text ml-2 text-transparent'>T-Management</span>
-            </Link>
-            <div className='flex items-center gap-4 justify-end w-full mr-25'>
-                <Link to="/login" className="text-gray-300  hover:text-white">Log In</Link>
-                <Link to='/register'>
-                    <Button>Get Started</Button>
-                </Link>
-            </div>
-        </nav>
-    )
+export default function Navbar() {
+  return (
+    <header className="sticky top-0 z-20 border-b border-[#eeedf3] bg-[#ffffffed] backdrop-blur-xl">
+      <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-3.5 sm:px-8">
+        <Link to="/" className="flex items-center gap-2.5 text-lg font-bold tracking-tight text-[#302d43]">
+          <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-[#a99afa] to-[#7161df] text-base font-extrabold text-white shadow-sm">T</span>
+          <span>T-Management</span>
+        </Link>
+        <div className="flex items-center gap-3 sm:gap-5">
+          <NavLink to="/login" className="px-1 py-2 text-sm font-semibold text-[#777487] transition hover:text-[#6555d2] sm:text-base">Log in</NavLink>
+          <Link to="/register"><Button className="px-4 py-2.5 text-sm sm:px-5 sm:text-base">Get started</Button></Link>
+        </div>
+      </nav>
+    </header>
+  )
 }

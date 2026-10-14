@@ -2,52 +2,42 @@ import { useState } from "react";
 import Button from "../components/Button";
 import AuthLayout from "../components/AuthLayout";
 import Input from "../components/Input";
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom';
+import {apiRequest} from "../lib/api"
 export default function LoginPage() {
-  const [message, setMessage] = useState("");
-  const [messageType, setMessageType] = useState("error");
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const [error,setError]=useState("");
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const navigate=useNavigate();
   const handleLogin = async (e) => {
     e.preventDefault()
-    setMessage("")
+    setError("")
     setIsSubmitting(true)
 
-    const formData = new FormData(e.currentTarget)
+    try{
+      const data= await apiRequest("/auth/login",{
+        method:"POST",
+        body:JSON.stringify({email,password})
+      });
 
-    try {
-      const response = await fetch("http://localhost:5000/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: formData.get("email"),
-          password: formData.get("password"),
-        }),
-      })
-      const data = await response.json().catch(() => ({}))
-
-      if (!response.ok) {
-        throw new Error(data.error || "Unable to sign in.")
-      }
-
-      localStorage.setItem("token", data.token)
-      setMessageType("success")
-      setMessage("Signed in successfully.")
-    } catch (error) {
-      setMessageType("error")
-      setMessage(error instanceof Error ? error.message : "Unable to sign in.")
-    } finally {
+      localStorage.setItem("token",data.token)
+      localStorage.setItem("user", JSON.stringify(data.user))
+      navigate("/dashboard")
+    }catch(err){
+      setError(err.message)
+    }finally{
       setIsSubmitting(false)
     }
   }
   return (
     
-    <AuthLayout title="Welcome Back" subtitle="Sign in to your T-Management account" footer={<>Don't have an account? <Link to="/register" className="text-purple-400 hover:underline">Create one</Link></>}>
+    <AuthLayout title="Welcome back" subtitle="Sign in to your T-Management account." footer={<>Don’t have an account? <Link to="/register" className="font-semibold text-[#7161d7] hover:underline">Create one</Link></>}>
     <form onSubmit={handleLogin}>
-      <Input label="Email Address :" name="email" type="email" autoComplete="email" placeholder="Enter your email address" required/> 
-      <Input label="Password :" name="password" type="password" autoComplete="current-password" placeholder="Enter your password" required/> 
-      <Button type="submit" disabled={isSubmitting} className="w-full mt-4">{isSubmitting ? "Signing in..." : "Login"}</Button>
-      {message && <p role={messageType === "error" ? "alert" : "status"} className={`mt-4 text-sm ${messageType === "error" ? "text-red-400" : "text-green-400"}`}>{message}</p>}
+      <Input label="Email address" name="email" value={email} onChange={(e)=>setEmail(e.target.value)} type="email" autoComplete="email" placeholder="Enter your email address" required/>
+      <Input label="Password" name="password" value={password} onChange={(e)=>setPassword(e.target.value)} type="password" autoComplete="current-password" placeholder="Enter your password" required/>
+      {error && <p role="alert" className="mb-3 rounded-xl border border-[#f7d0d2] bg-[#fff2f1] px-4 py-3 text-sm text-[#b44850]">{error}</p>}
+      <Button type="submit" disabled={isSubmitting} className="mt-1 min-h-12 w-full text-base">{isSubmitting ? "Signing in…" : "Sign in"}</Button>
     </form>
     </AuthLayout>
 
